@@ -204,6 +204,13 @@ ul {
 
 .hero-crest {
     height: 150px;
+    width: 150px;
+    /* Enforce square for circle */
+    object-fit: cover;
+    border-radius: 50%;
+    /* Make it circular */
+    background-color: white;
+    /* White background circle */
     margin-bottom: 30px;
     filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
 }
@@ -487,6 +494,13 @@ ul {
 
     .hero h2 {
         font-size: 1.2rem;
+    }
+
+    .hero-crest {
+        height: 100px;
+        /* Smaller logo on mobile */
+        width: 100px;
+        object-fit: cover;
     }
 
     .about-grid {
