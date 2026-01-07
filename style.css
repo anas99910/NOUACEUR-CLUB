@@ -193,7 +193,11 @@ ul {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(0, 51, 160, 0.6) 0%, rgba(0, 31, 102, 0.7) 100%);
+    /* Modern Glassy Gradient: Deep Blue with slight transparency */
+    background: linear-gradient(135deg, rgba(0, 51, 160, 0.8) 0%, rgba(0, 20, 60, 0.85) 100%);
+    backdrop-filter: blur(8px);
+    /* The Blur Effect */
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .hero-content {
