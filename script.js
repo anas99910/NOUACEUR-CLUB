@@ -133,6 +133,14 @@ window.addEventListener('load', () => {
     preloader.classList.add('loaded');
 });
 
+// Failsafe: Force remove preloader after 3 seconds if something gets stuck
+setTimeout(() => {
+    const preloader = document.getElementById('preloader');
+    if (preloader && !preloader.classList.contains('loaded')) {
+        preloader.classList.add('loaded');
+    }
+}, 3000);
+
 // Scroll Animations
 const observerOptions = {
     threshold: 0.1
@@ -161,7 +169,8 @@ function setTheme(theme) {
 }
 
 // Initial Theme Check
-if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+// Default to Light unless explicitly set to Dark
+if (storedTheme === 'dark') {
     setTheme('dark');
 } else {
     setTheme('light');

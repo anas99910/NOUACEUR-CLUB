@@ -7,6 +7,10 @@
     --error: #d32f2f;
 }
 
+.hidden {
+    display: none !important;
+}
+
 body {
     font-family: 'Cairo', sans-serif;
     margin: 0;

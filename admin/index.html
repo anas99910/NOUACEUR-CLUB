@@ -20,8 +20,8 @@
             </div>
             <ul class="sidebar-menu">
                 <li><a href="#" class="active" id="nav-matches">⚽ المباريات</a></li>
-                <li><a href="#" id="nav-squad">👥 الفريق (قريباً)</a></li>
-                <li><a href="#" id="nav-news">📰 الأخبار (قريباً)</a></li>
+                <li><a href="#" id="nav-squad">👥 الفريق</a></li>
+                <li><a href="#" id="nav-news">📰 الأخبار</a></li>
                 <li><a href="#" id="logout-btn" style="color: #ff6b6b;">🚪 تسجيل الخروج</a></li>
             </ul>
         </aside>
@@ -53,6 +53,40 @@
                                 <td colspan="5" style="text-align:center;">جاري التحميل...</td>
                             </tr>
                         </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Squad List (Hidden by default) -->
+            <div id="squad-view" class="content-card hidden">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>الدور</th>
+                                <th>الرقم</th>
+                                <th>المركز</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="squad-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- News List (Hidden by default) -->
+            <div id="news-view" class="content-card hidden">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>العنوان</th>
+                                <th>التاريخ</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="news-table-body"></tbody>
                     </table>
                 </div>
             </div>
