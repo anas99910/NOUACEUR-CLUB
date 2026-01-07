@@ -6,7 +6,12 @@ import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy 
 
 onAuthStateChanged(auth, (user) => {
     if (!user) window.location.href = "login.html";
-    else { loadMatches(); loadSquad(); loadNews(); }
+    else {
+        loadMatches();
+        loadSquad();
+        loadNews();
+        switchView('matches'); // Initialize UI state
+    }
 });
 
 document.getElementById('logout-btn').addEventListener('click', () => {
@@ -25,6 +30,9 @@ const navLinks = {
 };
 const pageTitle = document.getElementById('page-title');
 const addBtn = document.getElementById('add-match-btn'); // reusing ID, changing text
+
+// Set initial click handler for the default view (matches)
+addBtn.onclick = () => openModal('match');
 
 function switchView(viewName) {
     Object.keys(views).forEach(key => {
@@ -263,6 +271,7 @@ form.addEventListener('submit', async (e) => {
 closeModalBtn.onclick = () => modal.classList.add('hidden');
 
 // Globals
+window.openModal = openModal; // Expose for HTML onclick
 window.editItem = (type, id) => {
     let item;
     if (type === 'match') item = matches.find(m => m.id === id);

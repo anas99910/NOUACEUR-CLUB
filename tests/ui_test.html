@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>UI Test</title>
+    <link rel="stylesheet" href="../admin/admin.css">
+    <style>
+        /* Mocking the imports/styles if needed */
+        body {
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" id="nav-matches">Matches</a></li>
+                <li><a href="#" id="nav-squad">Squad</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <div class="header-bar">
+                <h2 id="page-title">Test Dashboard</h2>
+                <button class="btn-login" id="add-match-btn">+ Add Match</button>
+            </div>
+            <div id="matches-view" class="content-card">Matches View</div>
+            <div id="squad-view" class="content-card hidden">Squad View</div>
+            <div id="news-view" class="content-card hidden">News View</div>
+        </main>
+    </div>
+
+    <div id="match-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">Modal</h3>
+            <form id="match-form"></form>
+        </div>
+    </div>
+
+    <script>
+        // Mocking dashboard.js logic
+        const addBtn = document.getElementById('add-match-btn');
+        const modal = document.getElementById('match-modal');
+        const closeModalBtn = document.querySelector('.close-modal');
+        const pageTitle = document.getElementById('page-title');
+
+        // Mock Views
+        const views = { matches: document.getElementById('matches-view'), squad: document.getElementById('squad-view') };
+        const navLinks = { matches: document.getElementById('nav-matches'), squad: document.getElementById('nav-squad') };
+
+        // Test Function
+        function openModal(type) {
+            console.log('Open Modal Called for:', type);
+            modal.classList.remove('hidden');
+            document.getElementById('modal-title').textContent = "Adding " + type;
+        }
+
+        closeModalBtn.onclick = () => modal.classList.add('hidden');
+
+        // The exact logic from dashboard.js
+        addBtn.onclick = () => openModal('match');
+
+        function switchView(viewName) {
+            console.log('Switching to:', viewName);
+            Object.keys(views).forEach(key => { if (views[key]) views[key].classList.add('hidden'); });
+            if (views[viewName]) views[viewName].classList.remove('hidden');
+
+            if (viewName === 'matches') {
+                pageTitle.textContent = "Matches";
+                addBtn.textContent = "+ Add Match";
+                addBtn.onclick = () => openModal('match');
+            } else if (viewName === 'squad') {
+                pageTitle.textContent = "Squad";
+                addBtn.textContent = "+ Add Player";
+                addBtn.onclick = () => openModal('player');
+            }
+        }
+
+        // Simulating the Auth Init
+        setTimeout(() => {
+            console.log("Auth Init...");
+            switchView('matches');
+        }, 500);
+
+        // Debug
+        addBtn.addEventListener('click', () => console.log('Button Clicked directly'));
+    </script>
+</body>
+
+</html>
