@@ -589,6 +589,227 @@ ul {
     transform: translateY(-5px);
 }
 
-.gallery-item:hover img {
-    transform: scale(1.05);
+
+/* Matches Section */
+.matches {
+    background-color: #f9f9f9;
+    padding: 60px 0;
+}
+
+.match-section-header {
+    background-color: #1a237e;
+    /* Dark Blue from the image header */
+    color: #ffeb3b;
+    /* Yellow text */
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: right;
+    /* RTL alignment */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.match-section-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-family: var(--font-ar);
+}
+
+.upcoming-card {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 50px;
+    border: 1px solid #ddd;
+}
+
+.uc-content p {
+    font-size: 1.2rem;
+    color: #777;
+}
+
+.matches-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.match-item {
+    background: white;
+    border: 1px solid #ddd;
+    /* Light border */
+    border-radius: 0;
+    /* Square edges as per image */
+    display: flex;
+    /* Natural RTL flow puts first DOM element (Date) on Right, which is what we want. */
+    align-items: stretch;
+    transition: transform 0.2s;
+    overflow: hidden;
+}
+
+.match-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Date Box (Right side in image, so needs to be first in DOM if LTR or handled via flex order) 
+   In existing RTL HTML context: 
+   Flex direction row (default in RTL) starts from right.
+   So first element in DOM is Rightmost.
+*/
+.match-date-box {
+    background-color: #e3dec1;
+    /* Beige/Goldish background from image */
+    background: linear-gradient(to bottom, #ded9c4, #d6d0b3);
+    padding: 4px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 120px;
+    border-left: 1px solid #ccc;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+}
+
+.match-date-box .m-date {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    color: #000;
+}
+
+.match-date-box .m-time {
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.league-logo-small {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-top: 5px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    /* Small icon in corner like the red circle in image */
+    border: 1px solid white;
+}
+
+/* Teams container */
+.match-teams {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    justify-content: space-around;
+    font-family: var(--font-ar);
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 40%;
+    justify-content: flex-end;
+    /* Align towards center */
+}
+
+.team.away {
+    justify-content: flex-start;
+    /* Align towards center */
+    flex-direction: row-reverse;
+    /* Mirror layout for away team */
+}
+
+.team-name {
+    font-weight: 700;
+    color: #001f66;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.team-logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.team-logo-placeholder {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: bold;
+    border-radius: 50%;
+    /* Circle */
+    /* Clip path for shield shape? Let's stick to circle for consistency or custom shape */
+}
+
+
+.match-score {
+    background-color: #f0f4f8;
+    /* Light background for score pill */
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Oswald', sans-serif;
+    /* Number font */
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    min-width: 80px;
+    justify-content: center;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNjY2MiLz4KPC9zdmc+');
+    /* Subtle pattern */
+}
+
+.match-score .score {
+    color: #1a237e;
+    /* Dark blue numbers */
+}
+
+/* Mobile Responsiveness for Matches */
+@media (max-width: 768px) {
+    .match-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .match-date-box {
+        width: 100%;
+        border-left: none;
+        border-bottom: 1px solid #ccc;
+        flex-direction: row;
+        gap: 20px;
+        padding: 10px;
+    }
+
+    .match-teams {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px 10px;
+    }
+
+    .team {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .team.away {
+        flex-direction: row;
+        /* Reset to normal row for vertical stack center alignment */
+        justify-content: center;
+    }
+
+    .match-score {
+        margin: 10px 0;
+    }
 }
