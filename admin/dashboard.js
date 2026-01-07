@@ -195,11 +195,42 @@ function openModal(type, item = null) {
 
     } else if (type === 'news') {
         document.getElementById('modal-title').textContent = item ? "تعديل خبر" : "إضافة خبر";
+
+        let imgPreview = '';
+        if (item?.image) {
+            imgPreview = `<img src="${item.image}" style="width: 100%; max-height: 150px; object-fit: contain; margin-top: 10px; border-radius: 5px;">`;
+        }
+
         container.insertAdjacentHTML('beforeend', `
             <div class="form-group"><label>العنوان</label><input type="text" id="nTitle" required value="${item?.title || ''}"></div>
+            <div class="form-group">
+                <label>صورة الخبر (Maximum 1MB)</label>
+                <input type="file" id="nImageFile" accept="image/*">
+                <input type="hidden" id="nImageBase64" value=""> <!-- Stores existing or new base64 -->
+                <div id="image-preview">${imgPreview}</div>
+            </div>
             <div class="form-group"><label>المحتوى</label><textarea id="nContent" rows="4" style="width:100%">${item?.content || ''}</textarea></div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="nDate" required value="${item?.date || ''}"></div>
          `);
+
+        // If editing, keep old image in hidden field
+        if (item?.image) {
+            document.getElementById('nImageBase64').value = item.image;
+        }
+
+        // Handle file selection
+        document.getElementById('nImageFile').onchange = async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    const base64 = await compressImage(file);
+                    document.getElementById('nImageBase64').value = base64;
+                    document.getElementById('image-preview').innerHTML = `<img src="${base64}" style="width: 100%; max-height: 150px; object-fit: contain; margin-top: 10px; border-radius: 5px;">`;
+                } catch (err) {
+                    alert("فشل ضغط الصورة: " + err.message);
+                }
+            }
+        };
     }
 
     container.appendChild(saveBtn);
@@ -210,6 +241,46 @@ function openModal(type, item = null) {
             document.getElementById('scores-container').style.display = e.target.value === 'true' ? 'flex' : 'none';
         }
     }
+}
+
+// Utility: Compress Image to Base64
+function compressImage(file) {
+    return new Promise((resolve, reject) => {
+        const maxWidth = 800;
+        const maxHeight = 800;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                // Compress to JPEG 0.7 quality
+                resolve(canvas.toDataURL('image/jpeg', 0.7));
+            };
+            img.onerror = (err) => reject(err);
+        };
+        reader.onerror = (err) => reject(err);
+    });
 }
 
 
@@ -245,7 +316,8 @@ form.addEventListener('submit', async (e) => {
             data = {
                 title: document.getElementById('nTitle').value,
                 content: document.getElementById('nContent').value,
-                date: document.getElementById('nDate').value
+                date: document.getElementById('nDate').value,
+                image: document.getElementById('nImageBase64').value
             };
         }
 

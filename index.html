@@ -46,6 +46,7 @@
                 <li><a href="#about" data-i18n="navAbout">عن النادي</a></li>
                 <li><a href="#squad" data-i18n="navSquad">الفريق</a></li>
                 <li><a href="#matches" data-i18n="navMatches">المباريات</a></li>
+                <li><a href="#news" data-i18n="navNews">الأخبار</a></li>
                 <li><a href="#gallery" data-i18n="navGallery">معرض الصور</a></li>
                 <li><a href="#contact" data-i18n="navContact">اتصل بنا</a></li>
                 <!-- Language Switcher -->
@@ -194,6 +195,28 @@
         </div>
     </section>
 
+    <!-- News Section -->
+    <section id="news" class="section news">
+        <div class="container">
+            <div class="section-header hidden-on-scroll">
+                <h2 data-i18n="newsHeader">آخر الأخبار</h2>
+                <div class="header-line"></div>
+            </div>
+
+            <div class="news-grid" id="news-grid">
+                <!-- News items will be dynamically loaded here -->
+                <div style="text-align: center; width: 100%; padding: 20px; color: grey;">
+                    جاري تحميل الأخبار...
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-secondary" id="load-more-news" style="display:none;"
+                    data-i18n="loadMoreNews">المزيد من الأخبار</button>
+            </div>
+        </div>
+    </section>
+
     <!-- Gallery Section -->
     <section id="gallery" class="section">
         <div class="container">
@@ -255,6 +278,16 @@
             <p data-i18n="footerCopyright">&copy; 2026 النادي الرياضي النواصر أولاد صالح. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
+
+    <div id="news-modal" class="modal hidden">
+        <div class="modal-content news-modal-content" id="news-modal-content-area">
+            <span class="close-modal close-news-modal">&times;</span>
+            <div id="news-modal-body">
+                <!-- Content injected by JS -->
+            </div>
+            <!-- Footer removed as per request -->
+        </div>
+    </div>
 
     <script type="module" src="script.js"></script>
 
