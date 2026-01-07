@@ -109,6 +109,17 @@ body {
     color: white;
     padding: 20px 0;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    /* Fixed position */
+    height: 100vh;
+    /* Full viewport height */
+    top: 0;
+    right: 0;
+    /* RTL alignment */
+    overflow-y: auto;
+    /* Allow internal scrolling if menu is tall */
 }
 
 .sidebar-header {
@@ -121,6 +132,9 @@ body {
     list-style: none;
     padding: 0;
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .sidebar-menu li a {
@@ -129,6 +143,10 @@ body {
     color: #cbd5e1;
     text-decoration: none;
     transition: 0.3s;
+}
+
+.sidebar-menu li:last-child {
+    margin-top: auto;
 }
 
 .sidebar-menu li a:hover,
@@ -141,6 +159,8 @@ body {
 .main-content {
     flex-grow: 1;
     padding: 30px;
+    margin-right: 250px;
+    /* Push content to left of fixed sidebar */
 }
 
 .header-bar {

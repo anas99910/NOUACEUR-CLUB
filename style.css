@@ -206,7 +206,7 @@ ul {
     height: 100vh;
     width: 100%;
     position: relative;
-    background: url('assets/hero_bg_final.jpg') no-repeat center center/cover;
+    background: url('assets/hero_bg_final.png') no-repeat center 20%/cover;
     display: flex;
     align-items: center;
     justify-content: center;
