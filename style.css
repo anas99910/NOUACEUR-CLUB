@@ -1127,12 +1127,38 @@ html[data-theme="dark"] #preloader {
     display: block;
 }
 
-#news-modal-body p {
+#news-modal-body p,
+.news-body-content p {
     line-height: 1.8;
     color: var(--text-color);
     font-size: 1.1rem;
-    white-space: pre-line;
-    /* Handle line breaks from textarea */
+    margin-bottom: 1em;
+}
+
+.news-body-content ul,
+.news-body-content ol {
+    margin-bottom: 1em;
+    padding-left: 20px;
+    /* LTR */
+}
+
+/* RTL Support for lists */
+[dir="rtl"] .news-body-content ul,
+[dir="rtl"] .news-body-content ol {
+    padding-left: 0;
+    padding-right: 20px;
+}
+
+.news-body-content li {
+    margin-bottom: 0.5em;
+}
+
+.news-body-content h1,
+.news-body-content h2,
+.news-body-content h3 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    color: var(--primary-blue);
 }
 
 .modal-footer {

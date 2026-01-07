@@ -209,7 +209,11 @@ function openModal(type, item = null) {
                 <input type="hidden" id="nImageBase64" value=""> <!-- Stores existing or new base64 -->
                 <div id="image-preview">${imgPreview}</div>
             </div>
-            <div class="form-group"><label>المحتوى</label><textarea id="nContent" rows="4" style="width:100%">${item?.content || ''}</textarea></div>
+            <div class="form-group"><label>المحتوى</label>
+                <!-- Quill Editor Container -->
+                <div id="editor-container" style="height: 200px; background: white; color: black;"></div>
+                <input type="hidden" id="nContent">
+            </div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="nDate" required value="${item?.date || ''}"></div>
          `);
 
@@ -217,6 +221,30 @@ function openModal(type, item = null) {
         if (item?.image) {
             document.getElementById('nImageBase64').value = item.image;
         }
+
+        // Initialize Quill
+        const quill = new Quill('#editor-container', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'align': [] }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'direction': 'rtl' }],     // RTL support
+                    ['clean']
+                ]
+            }
+        });
+
+        // Set content if editing
+        if (item?.content) {
+            quill.root.innerHTML = item.content;
+        }
+
+        // Store Quill instance globally or on the form to access it safely during submit
+        window.currentQuill = quill;
 
         // Handle file selection
         document.getElementById('nImageFile').onchange = async (e) => {
@@ -313,13 +341,18 @@ form.addEventListener('submit', async (e) => {
             };
         } else if (currentType === 'news') {
             collectionName = 'news';
+
+            // Get HTML from Quill
+            const contentHTML = window.currentQuill ? window.currentQuill.root.innerHTML : '';
+
             data = {
                 title: document.getElementById('nTitle').value,
-                content: document.getElementById('nContent').value,
+                content: contentHTML,
                 date: document.getElementById('nDate').value,
                 image: document.getElementById('nImageBase64').value
             };
         }
+
 
         if (editingId) {
             await updateDoc(doc(db, collectionName, editingId), data);

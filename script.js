@@ -134,19 +134,18 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Preloader
-window.addEventListener('load', () => {
-    const preloader = document.getElementById('preloader');
-    preloader.classList.add('loaded');
-});
-
-// Failsafe: Force remove preloader after 3 seconds if something gets stuck
-setTimeout(() => {
+// Preloader Logic
+const hidePreloader = () => {
     const preloader = document.getElementById('preloader');
     if (preloader && !preloader.classList.contains('loaded')) {
         preloader.classList.add('loaded');
     }
-}, 3000);
+};
+
+window.addEventListener('load', hidePreloader);
+
+// Failsafe: Force remove preloader faster (1.5s max)
+setTimeout(hidePreloader, 1500);
 
 // Scroll Animations
 const observerOptions = {
@@ -176,7 +175,6 @@ function setTheme(theme) {
 }
 
 // Initial Theme Check
-// Default to Light unless explicitly set to Dark
 if (storedTheme === 'dark') {
     setTheme('dark');
 } else {
@@ -184,7 +182,7 @@ if (storedTheme === 'dark') {
 }
 
 themeToggle.addEventListener('click', (e) => {
-    e.preventDefault(); // Prevent jump if it was a link, though it's a button now
+    e.preventDefault();
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
@@ -247,8 +245,8 @@ async function fetchAndRenderMatches() {
     }
 }
 
-// Fetch matches after page load
-window.addEventListener('load', fetchAndRenderMatches);
+// Start fetching matches immediately
+fetchAndRenderMatches();
 
 // --- News Logic ---
 async function fetchAndRenderNews() {
@@ -271,8 +269,9 @@ async function fetchAndRenderNews() {
             const dateObj = new Date(newsItem.date);
             const dateStr = dateObj.toLocaleDateString('ar-MA', { day: 'numeric', month: 'long', year: 'numeric' });
 
-            // Truncate content for excerpt
-            const excerpt = newsItem.content.length > 100 ? newsItem.content.substring(0, 100) + '...' : newsItem.content;
+            // Truncate content for excerpt (remove html tags for excerpt using simple regex)
+            const plainText = newsItem.content.replace(/<[^>]*>?/gm, '');
+            const excerpt = plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText;
 
             // Fallback image if none provided
             const imageUrl = newsItem.image || 'assets/logo_final.jpg';
@@ -302,6 +301,8 @@ async function fetchAndRenderNews() {
         newsGrid.innerHTML = '<p style="text-align:center; color:red;">فشل تحميل الأخبار.</p>';
     }
 }
+// Start fetching news immediately
+fetchAndRenderNews();
 
 // --- News Modal Logic ---
 let currentNewsItem = null;
@@ -335,7 +336,7 @@ window.openNewsModal = async (id) => {
             <img src="${imageUrl}" style="${item.image ? '' : 'object-fit:contain; background:#333; padding:20px;'}" crossorigin="anonymous">
             <h2 id="modal-news-title">${item.title}</h2>
             <span class="meta-date">${dateStr}</span>
-            <p>${item.content}</p>
+            <div class="news-body-content">${item.content}</div>
         `;
 
         document.getElementById('news-modal').classList.remove('hidden');
