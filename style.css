@@ -4,15 +4,40 @@
 */
 
 :root {
+    /* Brand Colors */
     --primary-blue: #0033A0;
     --dark-blue: #001f66;
     --accent-silver: #F0F0F0;
-    --text-dark: #1a1a1a;
-    --text-light: #f5f5f5;
+
+    /* Semantic Colors (Light Theme Default) */
+    --bg-body: #ffffff;
+    --bg-card: #ffffff;
+    --bg-secondary: #f9f9f9;
+    --text-main: #1a1a1a;
+    --text-secondary: #555555;
+    --border-color: #dddddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --mobile-menu-bg: #ffffff;
+
+    /* Fonts/Transitions */
     --transition-speed: 0.3s;
     --font-heading: 'Oswald', sans-serif;
     --font-body: 'Montserrat', sans-serif;
     --font-ar: 'Cairo', sans-serif;
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    --bg-body: #121212;
+    --bg-card: #1e1e1e;
+    --bg-secondary: #181818;
+    --text-main: #e0e0e0;
+    --text-secondary: #aaaaaa;
+    --border-color: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --nav-bg: rgba(18, 18, 18, 0.95);
+    --mobile-menu-bg: #1e1e1e;
 }
 
 * {
@@ -24,10 +49,11 @@
 body {
     font-family: var(--font-ar);
     /* Default to Arabic font */
-    color: var(--text-dark);
+    color: var(--text-main);
     line-height: 1.6;
-    background-color: #fff;
+    background-color: var(--bg-body);
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1,
@@ -104,9 +130,10 @@ ul {
     top: 0;
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--nav-bg);
     backdrop-filter: blur(10px);
     z-index: 1000;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
@@ -596,8 +623,9 @@ ul {
 
 /* Matches Section */
 .matches {
-    background-color: #f9f9f9;
+    background-color: var(--bg-secondary);
     padding: 60px 0;
+    transition: background-color 0.3s ease;
 }
 
 .match-section-header {
@@ -620,12 +648,13 @@ ul {
 }
 
 .upcoming-card {
-    background: white;
+    background: var(--bg-card);
     padding: 40px;
     border-radius: 8px;
     text-align: center;
     margin-bottom: 50px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .uc-content p {
@@ -640,8 +669,8 @@ ul {
 }
 
 .match-item {
-    background: white;
-    border: 1px solid #ddd;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     /* Light border */
     border-radius: 0;
     /* Square edges as per image */
@@ -816,4 +845,98 @@ ul {
     .match-score {
         margin: 10px 0;
     }
+}
+
+/* ====================
+   Preloader
+   ==================== */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+#preloader.loaded {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.pulsing-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Dark Mode Override for Preloader */
+html[data-theme="dark"] #preloader {
+    background-color: #121212;
+}
+
+/* ====================
+   Scroll Animations
+   ==================== */
+.hidden-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.show-on-scroll {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger Delays */
+.delay-100 {
+    transition-delay: 0.1s;
+}
+
+.delay-200 {
+    transition-delay: 0.2s;
+}
+
+.delay-300 {
+    transition-delay: 0.3s;
+}
+
+
+/* Theme Toggle Button */
+.theme-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0 10px;
+    color: var(--text-main);
+    transition: transform 0.3s ease;
+}
+
+.theme-btn:hover {
+    transform: rotate(15deg) scale(1.1);
 }

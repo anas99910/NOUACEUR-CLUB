@@ -126,3 +126,110 @@ window.addEventListener('scroll', () => {
         navbar.style.boxShadow = "none";
     }
 });
+
+// Preloader
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    preloader.classList.add('loaded');
+});
+
+// Scroll Animations
+const observerOptions = {
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show-on-scroll');
+        }
+    });
+}, observerOptions);
+
+const hiddenElements = document.querySelectorAll('.hidden-on-scroll');
+hiddenElements.forEach(el => observer.observe(el));
+
+// Theme Toggle
+const themeToggle = document.getElementById('theme-toggle');
+const storedTheme = localStorage.getItem('theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+
+// Initial Theme Check
+if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+    setTheme('dark');
+} else {
+    setTheme('light');
+}
+
+themeToggle.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent jump if it was a link, though it's a button now
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+});
+
+// --- Firebase Integration ---
+import { db } from './firebase-config.js';
+import { collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+async function fetchAndRenderMatches() {
+    const matchesList = document.getElementById('matches-list');
+
+    try {
+        const q = query(collection(db, "matches"), orderBy("date", "desc"), limit(10));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            matchesList.innerHTML = '<p style="text-align:center;">لا توجد مباريات لعرضها.</p>';
+            return;
+        }
+
+        matchesList.innerHTML = ''; // Clear loading state
+
+        querySnapshot.forEach((doc) => {
+            const match = doc.data();
+            const dateObj = new Date(match.date);
+            const dateStr = dateObj.toLocaleDateString('ar-MA', { day: 'numeric', month: 'long', year: 'numeric' });
+            const timeStr = dateObj.toLocaleTimeString('ar-MA', { hour: '2-digit', minute: '2-digit' });
+
+            const matchHTML = `
+                <div class="match-item shadow hidden-on-scroll show-on-scroll">
+                    <div class="match-date-box">
+                        <span class="m-date">${dateStr}</span>
+                        <span class="m-time">${timeStr}</span>
+                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
+                    </div>
+                    <div class="match-teams">
+                        <div class="team home">
+                            <span class="team-name">${match.teamHome}</span>
+                            <div class="team-logo-placeholder" style="background-color: #0033A0;">${match.teamHome.charAt(0)}</div>
+                        </div>
+                        <div class="match-score">
+                            <span class="score">${match.isFinished ? match.scoreHome : '-'}</span>
+                            <span class="divider">-</span>
+                            <span class="score">${match.isFinished ? match.scoreAway : '-'}</span>
+                        </div>
+                        <div class="team away">
+                            <div class="team-logo-placeholder" style="background-color: #333;">${match.teamAway.charAt(0)}</div>
+                            <span class="team-name">${match.teamAway}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            matchesList.insertAdjacentHTML('beforeend', matchHTML);
+        });
+
+    } catch (error) {
+        console.error("Error fetching matches:", error);
+        matchesList.innerHTML = '<p style="text-align:center; color:red;">فشل تحميل المباريات. تأكد من الاتصال بالإنترنت.</p>';
+    }
+}
+
+// Fetch matches after page load
+window.addEventListener('load', fetchAndRenderMatches);

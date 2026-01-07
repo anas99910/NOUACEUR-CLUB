@@ -27,6 +27,13 @@
 
 <body>
 
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-content">
+            <img src="assets/logo_final.jpg" alt="Loading..." class="pulsing-logo">
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
@@ -43,6 +50,8 @@
                 <li><a href="#contact" data-i18n="navContact">اتصل بنا</a></li>
                 <!-- Language Switcher -->
                 <li><a href="#" id="lang-switch" class="lang-btn">FR</a></li>
+                <li id="theme-toggle-li"><button id="theme-toggle" class="theme-btn"
+                        aria-label="Toggle Dark Mode">🌙</button></li>
             </ul>
             <div class="hamburger">
                 <span class="bar"></span>
@@ -81,7 +90,7 @@
     <!-- About Section -->
     <section id="about" class="section about">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header hidden-on-scroll">
                 <h2 data-i18n="aboutHeader">إرثنا</h2>
                 <div class="header-line"></div>
             </div>
@@ -106,14 +115,14 @@
     <!-- Squad Section -->
     <section id="squad" class="section squad bg-dark">
         <div class="container">
-            <div class="section-header text-white">
+            <div class="section-header text-white hidden-on-scroll">
                 <h2 data-i18n="squadHeader">الفريق</h2>
                 <div class="header-line"></div>
             </div>
 
             <div class="squad-grid" id="squad-grid">
                 <!-- Player Cards -->
-                <div class="player-card">
+                <div class="player-card hidden-on-scroll">
                     <div class="player-img-placeholder">
                         <span class="player-number">10</span>
                     </div>
@@ -122,7 +131,7 @@
                         <p data-i18n="posMidfielder">وسط ميدان</p>
                     </div>
                 </div>
-                <div class="player-card">
+                <div class="player-card hidden-on-scroll">
                     <div class="player-img-placeholder">
                         <span class="player-number">9</span>
                     </div>
@@ -131,7 +140,7 @@
                         <p data-i18n="posForward">مهاجم</p>
                     </div>
                 </div>
-                <div class="player-card">
+                <div class="player-card hidden-on-scroll">
                     <div class="player-img-placeholder">
                         <span class="player-number">1</span>
                     </div>
@@ -140,7 +149,7 @@
                         <p data-i18n="posGoalkeeper">حارس المرمى</p>
                     </div>
                 </div>
-                <div class="player-card">
+                <div class="player-card hidden-on-scroll">
                     <div class="player-img-placeholder">
                         <span class="player-number">4</span>
                     </div>
@@ -157,7 +166,7 @@
     <section id="matches" class="section matches">
         <div class="container">
             <!-- Upcoming Match -->
-            <div class="match-section-header">
+            <div class="match-section-header hidden-on-scroll">
                 <h2 data-i18n="upcomingMatchHeader">مباراة قادمة :</h2>
             </div>
             <div class="upcoming-card shadow">
@@ -167,249 +176,14 @@
             </div>
 
             <!-- Recent Matches -->
-            <div class="match-section-header">
+            <div class="match-section-header hidden-on-scroll">
                 <h2 data-i18n="recentMatchesHeader">المباريات الأخيرة</h2>
             </div>
 
-            <div class="matches-list">
-                <!-- Match 1 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">5 ديسمبر 2025</span>
-                        <span class="m-time">15:30</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">ES RCA أمل الرجاء الرياضي</span>
-                            <div class="team-logo-placeholder" style="background-color: #006633;">RCA</div>
-                        </div>
-                        <div class="match-score">
-                            <span class="score">1</span>
-                            <span class="divider">-</span>
-                            <span class="score">1</span>
-                        </div>
-                        <div class="team away">
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                            <span class="team-name">النوصر أولاد صالح CSNOS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 2 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">29 نوفمبر 2025</span>
-                        <span class="m-time">15:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">CSNOS النواصر أولاد صالح</span>
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                        </div>
-                        <div class="match-score">
-                            <span class="score">3</span>
-                            <span class="divider">-</span>
-                            <span class="score">0</span>
-                        </div>
-                        <div class="team away">
-                            <div class="team-logo-placeholder" style="background-color: #000;">RCAZ</div>
-                            <span class="team-name">أمل نهضة الزمامرة Esp-RCAZ</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 3 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">23 نوفمبر 2025</span>
-                        <span class="m-time">15:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">ANSS النسمة السطاتية</span>
-                            <div class="team-logo-placeholder" style="background-color: #d4af37;">ANSS</div>
-                        </div>
-                        <div class="match-score">
-                            <span class="score">2</span>
-                            <span class="divider">-</span>
-                            <span class="score">2</span>
-                        </div>
-                        <div class="team away">
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                            <span class="team-name">النواصر أولاد صالح CSNOS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 4 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">19 نوفمبر 2025</span>
-                        <span class="m-time">15:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">CSNOS النواصر أولاد صالح</span>
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                        </div>
-                        <div class="match-score">
-                            <span class="score">2</span>
-                            <span class="divider">-</span>
-                            <span class="score">1</span>
-                        </div>
-                        <div class="team away">
-                            <div class="team-logo-placeholder" style="background-color: #666;">ASOFP</div>
-                            <span class="team-name">التكوين المهني ASOFP</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 5 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">15 نوفمبر 2025</span>
-                        <span class="m-time">15:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">YCR اليوسفية الرباطية</span>
-                            <div class="team-logo-placeholder" style="background-color: #000;">YCR</div>
-                        </div>
-                        <div class="match-score">
-                            <span class="score">2</span>
-                            <span class="divider">-</span>
-                            <span class="score">0</span>
-                        </div>
-                        <div class="team away">
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                            <span class="team-name">النواصر أولاد صالح CSNOS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 6 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">8 نوفمبر 2025</span>
-                        <span class="m-time">15:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">CSNOS النواصر أولاد صالح</span>
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                        </div>
-                        <div class="match-score">
-                            <span class="score">0</span>
-                            <span class="divider">-</span>
-                            <span class="score">6</span>
-                        </div>
-                        <div class="team away">
-                            <div class="team-logo-placeholder" style="background-color: #004400;">HSMK</div>
-                            <span class="team-name">حسنية بلدية خريبكة HSMK</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 7 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">2 نوفمبر 2025</span>
-                        <span class="m-time">16:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">CFSB فتح سيدي بنور</span>
-                            <div class="team-logo-placeholder" style="background-color: #228b22;">CFSB</div>
-                        </div>
-                        <div class="match-score">
-                            <span class="score">0</span>
-                            <span class="divider">-</span>
-                            <span class="score">0</span>
-                        </div>
-                        <div class="team away">
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                            <span class="team-name">النواصر أولاد صالح CSNOS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 8 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">25 أكتوبر 2025</span>
-                        <span class="m-time">16:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">CSNOS النواصر أولاد صالح</span>
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                        </div>
-                        <div class="match-score">
-                            <span class="score">2</span>
-                            <span class="divider">-</span>
-                            <span class="score">2</span>
-                        </div>
-                        <div class="team away">
-                            <div class="team-logo-placeholder" style="background-color: #aa0000;">WAC</div>
-                            <span class="team-name">أمل الوداد الرياضي ES WAC</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 9 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">19 أكتوبر 2025</span>
-                        <span class="m-time">16:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">CUSBA إتحاد بن احمد</span>
-                            <div class="team-logo-placeholder" style="background-color: #000088;">CUSBA</div>
-                        </div>
-                        <div class="match-score">
-                            <span class="score">1</span>
-                            <span class="divider">-</span>
-                            <span class="score">1</span>
-                        </div>
-                        <div class="team away">
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                            <span class="team-name">النواصر أولاد صالح CSNOS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match 10 -->
-                <div class="match-item shadow">
-                    <div class="match-date-box">
-                        <span class="m-date">11 أكتوبر 2025</span>
-                        <span class="m-time">16:00</span>
-                        <img src="assets/logo_final.jpg" class="league-logo-small" alt="League">
-                    </div>
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">CSNOS النواصر أولاد صالح</span>
-                            <img src="assets/logo_final.jpg" alt="CSNOS" class="team-logo-img">
-                        </div>
-                        <div class="match-score">
-                            <span class="score">1</span>
-                            <span class="divider">-</span>
-                            <span class="score">1</span>
-                        </div>
-                        <div class="team away">
-                            <div class="team-logo-placeholder" style="background-color: #444;">RSS</div>
-                            <span class="team-name">النهضة السطاتية RSS</span>
-                        </div>
-                    </div>
+            <div class="matches-list" id="matches-list">
+                <!-- Matches will be loaded dynamically from Firebase -->
+                <div style="text-align: center; padding: 20px; color: grey;">
+                    جاري تحميل المباريات...
                 </div>
             </div>
 
@@ -423,7 +197,7 @@
     <!-- Gallery Section -->
     <section id="gallery" class="section">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header hidden-on-scroll">
                 <h2 data-i18n="galleryHeader">معرض الصور</h2>
                 <div class="header-line"></div>
             </div>
@@ -482,7 +256,7 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 
 </html>

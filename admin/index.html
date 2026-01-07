@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | CSNOS Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="icon" type="image/jpg" href="../assets/logo_final.jpg">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>لوحة التحكم CSNOS</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" id="nav-matches">⚽ المباريات</a></li>
+                <li><a href="#" id="nav-squad">👥 الفريق (قريباً)</a></li>
+                <li><a href="#" id="nav-news">📰 الأخبار (قريباً)</a></li>
+                <li><a href="#" id="logout-btn" style="color: #ff6b6b;">🚪 تسجيل الخروج</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header-bar">
+                <h2 id="page-title">إدارة المباريات</h2>
+                <button class="btn-login" id="add-match-btn" style="width: auto; padding: 10px 25px;">+ إضافة
+                    مباراة</button>
+            </div>
+
+            <!-- Matches List -->
+            <div id="matches-view" class="content-card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>الفريق المضيف</th>
+                                <th>النتيجة</th>
+                                <th>الفريق الضيف</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matches-table-body">
+                            <!-- Rows will be injected here -->
+                            <tr>
+                                <td colspan="5" style="text-align:center;">جاري التحميل...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Match Modal (Add/Edit) -->
+    <div id="match-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">إضافة مباراة جديدة</h3>
+            <form id="match-form">
+                <input type="hidden" id="match-id">
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label>الفريق المضيف</label>
+                        <input type="text" id="teamHome" required placeholder="مثال: CSNOS">
+                    </div>
+                    <div class="form-group half">
+                        <label>الفريق الضيف</label>
+                        <input type="text" id="teamAway" required placeholder="مثال: Raja CA">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label>التاريخ والوقت</label>
+                        <input type="datetime-local" id="matchDate" required>
+                    </div>
+                    <div class="form-group half">
+                        <label>الحالة</label>
+                        <select id="isFinished">
+                            <option value="false">قادمة</option>
+                            <option value="true">انتهت</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row scores-row hidden" id="scores-container">
+                    <div class="form-group half">
+                        <label>نتيجة المضيف</label>
+                        <input type="number" id="scoreHome" placeholder="0">
+                    </div>
+                    <div class="form-group half">
+                        <label>نتيجة الضيف</label>
+                        <input type="number" id="scoreAway" placeholder="0">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login" id="save-match-btn">حفظ</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="dashboard.js"></script>
+</body>
+
+</html>
