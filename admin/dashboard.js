@@ -12,7 +12,7 @@ let currentType = 'match'; // 'match', 'player', 'news', 'schedule'
 
 // --- Auth & Navigation ---
 onAuthStateChanged(auth, (user) => {
-    if (!user) window.location.href = "/admin/login.html";
+    if (!user) window.location.href = "login.html";
     else {
         loadMatches();
         loadSquad();
@@ -26,7 +26,7 @@ onAuthStateChanged(auth, (user) => {
 document.getElementById('logout-btn').addEventListener('click', () => {
     signOut(auth).then(() => {
         localStorage.removeItem('adminView');
-        window.location.href = "/admin/login.html";
+        window.location.href = "login.html";
     });
 });
 

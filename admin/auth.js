@@ -8,7 +8,7 @@ const loginBtn = document.getElementById('login-btn');
 // Check if already logged in
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        window.location.href = "/admin/index.html"; // Redirect to dashboard
+        window.location.href = "index.html"; // Redirect to dashboard
     }
 });
 
@@ -23,7 +23,7 @@ loginForm.addEventListener('submit', async (e) => {
 
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = "/admin/index.html";
+        window.location.href = "index.html";
     } catch (error) {
         console.error(error);
         loginBtn.textContent = "دخول";
