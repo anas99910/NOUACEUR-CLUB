@@ -1487,6 +1487,28 @@ html[data-theme="dark"] #preloader {
     /* Spacing between rows */
 }
 
+/* Mobile Responsive Schedule */
+@media (max-width: 768px) {
+    .schedule-table {
+        min-width: auto;
+        /* Fit to screen on mobile */
+    }
+
+    .schedule-table td,
+    .schedule-table th {
+        white-space: normal;
+        /* Allow text to wrap */
+        padding: 10px 5px;
+        /* Smaller padding */
+        font-size: 0.85rem;
+        /* Smaller font */
+    }
+
+    .schedule-container {
+        padding: 0 10px;
+    }
+}
+
 /* LTR Override for Close Button */
 [dir="ltr"] .close-modal {
     left: auto;
