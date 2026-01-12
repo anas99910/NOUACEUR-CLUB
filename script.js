@@ -404,6 +404,55 @@ window.switchTab = (tabId) => {
     document.getElementById(tabId).classList.add('active');
 
     // Activate selected button (find the one with the correct onclick)
-    const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
     if (activeBtn) activeBtn.classList.add('active');
 };
+
+// --- UI Polish: Scroll to Top & Animations ---
+
+// 1. Scroll To Top Button
+const scrollTopBtn = document.getElementById("scrollTop");
+
+if (scrollTopBtn) {
+    window.addEventListener('scroll', () => {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            scrollTopBtn.style.display = "block";
+        } else {
+            scrollTopBtn.style.display = "none";
+        }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// 2. Scroll Reveal Animation
+document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('section:not(#hero), .news-card, .match-item');
+
+    // Add class if not present
+    sections.forEach(section => {
+        if (!section.classList.contains('reveal-section')) {
+            section.classList.add('reveal-section');
+        }
+    });
+
+    const observerOptions = {
+        root: null,
+        threshold: 0.15,
+        rootMargin: "0px"
+    };
+
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+});
