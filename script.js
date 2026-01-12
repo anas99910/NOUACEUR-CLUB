@@ -32,7 +32,28 @@ const translations = {
         posCenterBack: "قلب دفاع",
         galleryHeader: "معرض الصور",
         footerAddress: "النواصر، الدار البيضاء، المغرب",
-        footerCopyright: "&copy; 2026 النادي الرياضي النواصر أولاد صالح. جميع الحقوق محفوظة."
+        footerCopyright: "&copy; 2026 النادي الرياضي النواصر أولاد صالح. جميع الحقوق محفوظة.",
+        clubInfoTitle: "معلومات النادي",
+        labelFounded: "تأسس النادي سنة:",
+        valFounded: "1996",
+        labelFounders: "المؤسس:",
+        valFounder1: "علي بوغو",
+        valFounder2: "مصطفى محبوب",
+        valFounder3: "جابر المعطي",
+        labelPresident: "الرئيس الحالي:",
+        valPresident: "كمال بوغو",
+        labelStadium: "ملعب النادي:",
+        valStadium: "الرجراجي سلام - النواصر",
+        labelPhone: "رقم النادي:",
+        achievementsTitle: "الألقاب والإنجازات",
+        achieve2006: "الصعود من قسم شرفي الأول إلى قسم الثاني هواة سنة 2006",
+        achieve2008: "الصعود من قسم الثاني هواة إلى الأول هواة سنة 2008",
+        achieve2022: "الصعود إلى قسم الشمال الغربي سنة 2022",
+        achieveCup: "لعب دور الثمن النهائي لكأس العرش",
+        roleCoach: "المدرب",
+        scheduleTitle: "جدول المباريات (مواعيد)",
+        colRound: "الدورة",
+        colOpponent: "الخصم"
     },
     fr: {
         pageTitle: "Nouaceur Club Athletic | C.S.N.O.S",
@@ -65,7 +86,28 @@ const translations = {
         posCenterBack: "Défenseur Central",
         galleryHeader: "Galerie Photos",
         footerAddress: "Nouaceur, Casablanca, Maroc",
-        footerCopyright: "&copy; 2026 Nouaceur Club Athletic. Tous droits réservés."
+        footerCopyright: "&copy; 2026 Nouaceur Club Athletic. Tous droits réservés.",
+        clubInfoTitle: "Informations du Club",
+        labelFounded: "Année de fondation:",
+        valFounded: "1996",
+        labelFounders: "Fondateurs:",
+        valFounder1: "Ali Bogo",
+        valFounder2: "Mustapha Mahboub",
+        valFounder3: "Jaber El Maati",
+        labelPresident: "Président actuel:",
+        valPresident: "Kamal Bogo",
+        labelStadium: "Stade du club:",
+        valStadium: "Rajraji Salam - Nouaceur",
+        labelPhone: "Numéro du club:",
+        achievementsTitle: "Titres et Palmarès",
+        achieve2006: "Montée de la 1ère Division Honneur à la 2ème Division Amateur en 2006",
+        achieve2008: "Montée de la 2ème Division Amateur à la 1ère Division Amateur en 2008",
+        achieve2022: "Montée en Division Nord-Ouest en 2022",
+        achieveCup: "Huitièmes de finale de la Coupe du Trône",
+        roleCoach: "Entraîneur",
+        scheduleTitle: "Programme des Matchs",
+        colRound: "Journée",
+        colOpponent: "Adversaire"
     }
 };
 
@@ -349,3 +391,19 @@ document.querySelector('.close-news-modal').onclick = () => {
 };
 
 window.addEventListener('load', fetchAndRenderNews);
+
+// About Tabs Logic
+window.switchTab = (tabId) => {
+    // Hide all contents
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+
+    // Deactivate all buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+    // Show selected content
+    document.getElementById(tabId).classList.add('active');
+
+    // Activate selected button (find the one with the correct onclick)
+    const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
+    if (activeBtn) activeBtn.classList.add('active');
+};

@@ -2,91 +2,119 @@ import { auth, db } from '../firebase-config.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-// --- Auth & Navigation ---
+// --- Data State (Hoisted) ---
+let matchesData = [];
+let squadData = [];
+let newsData = [];
+let scheduleData = [];
+let editingId = null;
+let currentType = 'match'; // 'match', 'player', 'news', 'schedule'
 
+// --- Auth & Navigation ---
 onAuthStateChanged(auth, (user) => {
-    if (!user) window.location.href = "login.html";
+    if (!user) window.location.href = "/admin/login.html";
     else {
         loadMatches();
         loadSquad();
         loadNews();
-        switchView('matches'); // Initialize UI state
+        loadSchedule();
+        const savedView = localStorage.getItem('adminView') || 'matches';
+        switchView(savedView); // Initialize UI
     }
 });
 
 document.getElementById('logout-btn').addEventListener('click', () => {
-    signOut(auth).then(() => window.location.href = "login.html");
+    signOut(auth).then(() => {
+        localStorage.removeItem('adminView');
+        window.location.href = "/admin/login.html";
+    });
 });
 
 const views = {
     matches: document.getElementById('matches-view'),
     squad: document.getElementById('squad-view'),
-    news: document.getElementById('news-view')
+    news: document.getElementById('news-view'),
+    schedule: document.getElementById('schedule-view')
 };
+
 const navLinks = {
     matches: document.getElementById('nav-matches'),
     squad: document.getElementById('nav-squad'),
-    news: document.getElementById('nav-news')
+    news: document.getElementById('nav-news'),
+    schedule: document.getElementById('nav-schedule')
 };
-const pageTitle = document.getElementById('page-title');
-const addBtn = document.getElementById('add-match-btn'); // reusing ID, changing text
 
-// Set initial click handler for the default view (matches)
-addBtn.onclick = () => openModal('match');
+const pageTitle = document.getElementById('page-title');
+const mainActionBtn = document.getElementById('main-action-btn');
+
+// Initial click handler setup
+if (mainActionBtn) {
+    mainActionBtn.onclick = () => openModal('match');
+}
 
 function switchView(viewName) {
-    Object.keys(views).forEach(key => {
-        views[key].classList.add('hidden');
-        navLinks[key].classList.remove('active');
-    });
-    views[viewName].classList.remove('hidden');
-    navLinks[viewName].classList.add('active');
+    localStorage.setItem('adminView', viewName);
 
-    // Update Title & Button
-    if (viewName === 'matches') {
-        pageTitle.textContent = "إدارة المباريات";
-        addBtn.textContent = "+ إضافة مباراة";
-        addBtn.onclick = () => openModal('match');
-    } else if (viewName === 'squad') {
-        pageTitle.textContent = "إدارة الفريق";
-        addBtn.textContent = "+ إضافة لاعب";
-        addBtn.onclick = () => openModal('player');
-    } else if (viewName === 'news') {
-        pageTitle.textContent = "إدارة الأخبار";
-        addBtn.textContent = "+ إضافة خبر";
-        addBtn.onclick = () => openModal('news');
+    // Hide all
+    Object.keys(views).forEach(key => {
+        if (views[key]) views[key].classList.add('hidden');
+        if (navLinks[key]) navLinks[key].classList.remove('active');
+    });
+
+    // Show selected
+    if (views[viewName]) views[viewName].classList.remove('hidden');
+    if (navLinks[viewName]) navLinks[viewName].classList.add('active');
+
+    // Update Header
+    if (mainActionBtn) {
+        mainActionBtn.classList.remove('hidden');
+        if (viewName === 'matches') {
+            pageTitle.textContent = "إدارة المباريات";
+            mainActionBtn.textContent = "+ إضافة مباراة";
+            mainActionBtn.onclick = () => openModal('match');
+        } else if (viewName === 'squad') {
+            pageTitle.textContent = "إدارة الفريق";
+            mainActionBtn.textContent = "+ إضافة لاعب";
+            mainActionBtn.onclick = () => openModal('player');
+        } else if (viewName === 'news') {
+            pageTitle.textContent = "إدارة الأخبار";
+            mainActionBtn.textContent = "+ إضافة خبر";
+            mainActionBtn.onclick = () => openModal('news');
+        } else if (viewName === 'schedule') {
+            pageTitle.textContent = "جدول المباريات";
+            mainActionBtn.textContent = "+ إضافة موعد";
+            mainActionBtn.onclick = () => openScheduleModal();
+        }
     }
 }
 
-navLinks.matches.addEventListener('click', () => switchView('matches'));
-navLinks.squad.addEventListener('click', () => switchView('squad'));
-navLinks.news.addEventListener('click', () => switchView('news'));
+// Event Listeners for Nav
+if (navLinks.matches) navLinks.matches.addEventListener('click', () => switchView('matches'));
+if (navLinks.squad) navLinks.squad.addEventListener('click', () => switchView('squad'));
+if (navLinks.news) navLinks.news.addEventListener('click', () => switchView('news'));
+if (navLinks.schedule) navLinks.schedule.addEventListener('click', () => switchView('schedule'));
 
-// --- Data State ---
-let matches = [];
-let squad = [];
-let news = [];
-let editingId = null;
-let currentType = 'match'; // 'match', 'player', 'news'
 
-// --- Matches Logic (Existing) ---
+// --- Matches Logic ---
 async function loadMatches() {
     const tbody = document.getElementById('matches-table-body');
-    tbody.innerHTML = '<tr><td colspan="5">جاري التحميل...</td></tr>';
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">جاري التحميل...</td></tr>';
+
     const q = query(collection(db, "matches"), orderBy("date", "desc"));
     const snap = await getDocs(q);
-    matches = [];
-    snap.forEach(d => matches.push({ id: d.id, ...d.data() }));
+    matchesData = [];
+    snap.forEach(d => matchesData.push({ id: d.id, ...d.data() }));
 
     tbody.innerHTML = '';
-    matches.forEach((m) => {
+    matchesData.forEach((m) => {
         const row = document.createElement('tr');
         const d = new Date(m.date);
         row.innerHTML = `
             <td>${d.toLocaleDateString('ar-MA')}</td>
-            <td>${m.teamHome}</td>
-            <td>${m.isFinished ? m.scoreHome + '-' + m.scoreAway : 'قادمة'}</td>
-            <td>${m.teamAway}</td>
+            <td>${m.homeTeam || m.teamHome}</td>
+            <td dir="ltr" style="text-align:center;">${m.isFinished ? m.scoreHome + '-' + m.scoreAway : 'قادمة'}</td>
+            <td>${m.awayTeam || m.teamAway}</td>
             <td class="actions-cell">
                 <button class="btn-edit" onclick="window.editItem('match', '${m.id}')">تعديل</button>
                 <button class="btn-delete" onclick="window.deleteItem('matches', '${m.id}')">حذف</button>
@@ -99,13 +127,13 @@ async function loadMatches() {
 // --- Squad Logic ---
 async function loadSquad() {
     const tbody = document.getElementById('squad-table-body');
-    // tbody.innerHTML = '<tr><td colspan="5">جاري التحميل...</td></tr>';
+    if (!tbody) return;
     const snap = await getDocs(collection(db, "squad"));
-    squad = [];
-    snap.forEach(d => squad.push({ id: d.id, ...d.data() }));
+    squadData = [];
+    snap.forEach(d => squadData.push({ id: d.id, ...d.data() }));
 
     tbody.innerHTML = '';
-    squad.forEach((p) => {
+    squadData.forEach((p) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${p.name}</td>
@@ -124,12 +152,13 @@ async function loadSquad() {
 // --- News Logic ---
 async function loadNews() {
     const tbody = document.getElementById('news-table-body');
+    if (!tbody) return;
     const snap = await getDocs(collection(db, "news"));
-    news = [];
-    snap.forEach(d => news.push({ id: d.id, ...d.data() }));
+    newsData = [];
+    snap.forEach(d => newsData.push({ id: d.id, ...d.data() }));
 
     tbody.innerHTML = '';
-    news.forEach((n) => {
+    newsData.forEach((n) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${n.title}</td>
@@ -143,174 +172,96 @@ async function loadNews() {
     });
 }
 
+// --- Schedule Logic ---
+async function loadSchedule() {
+    const tbody = document.getElementById('schedule-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">جاري التحميل...</td></tr>';
 
-// --- Generic Modal & CRUD ---
-const modal = document.getElementById('match-modal'); // We'll reuse this modal container
-const closeModalBtn = document.querySelector('.close-modal');
+    // Ensure schedule collection exists and has data. Using 'round' as sort key.
+    const q = query(collection(db, "schedule"), orderBy("round", "asc"));
+    const snap = await getDocs(q);
+    scheduleData = [];
+    snap.forEach(d => scheduleData.push({ id: d.id, ...d.data() }));
+
+    tbody.innerHTML = '';
+    scheduleData.forEach((s) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${s.round}</td>
+            <td>${s.opponent}</td>
+            <td class="actions-cell">
+                <button class="btn-edit" onclick="window.editScheduleItem('${s.id}', ${s.round}, '${s.opponent}')">تعديل</button>
+                <button class="btn-delete" onclick="window.deleteItem('schedule', '${s.id}')">حذف</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+
+// --- Match/Squad/News Modal Handling ---
+const modal = document.getElementById('match-modal');
+const closeModalBtn = document.getElementById('close-match-modal');
 const form = document.getElementById('match-form');
 
-// We need to dynamically change form fields based on type
 function openModal(type, item = null) {
     currentType = type;
     modal.classList.remove('hidden');
     editingId = item ? item.id : null;
+    const formContainer = document.getElementById('match-form');
 
-    const container = document.getElementById('match-form'); // Actually the form itself
-    container.innerHTML = `<input type="hidden" id="match-id">`; // Reset fields
-
-    const saveBtn = document.createElement('button');
-    saveBtn.type = 'submit';
-    saveBtn.className = 'btn-login';
-    saveBtn.textContent = 'حفظ';
-    saveBtn.id = 'save-btn';
+    // Create form content based on type
+    let html = `<input type="hidden" id="match-id" value="${editingId || ''}">`;
+    let btnText = 'حفظ';
 
     if (type === 'match') {
         document.getElementById('modal-title').textContent = item ? "تعديل مباراة" : "إضافة مباراة";
-        container.insertAdjacentHTML('beforeend', `
+        html += `
             <div class="form-row">
-                <div class="form-group half"><label>الفريق المضيف</label><input type="text" id="teamHome" required value="${item?.teamHome || ''}"></div>
-                <div class="form-group half"><label>الفريق الضيف</label><input type="text" id="teamAway" required value="${item?.teamAway || ''}"></div>
+                <div class="form-group half"><label>الفريق المضيف</label><input type="text" id="teamHome" required value="${item?.homeTeam || item?.teamHome || ''}"></div>
+                <div class="form-group half"><label>الفريق الضيف</label><input type="text" id="teamAway" required value="${item?.awayTeam || item?.teamAway || ''}"></div>
             </div>
             <div class="form-row">
                 <div class="form-group half"><label>التاريخ</label><input type="datetime-local" id="matchDate" required value="${item?.date || ''}"></div>
-                <div class="form-group half"><label>الحالة</label><select id="isFinished"><option value="false">قادمة</option><option value="true">انتهت</option></select></div>
+                <div class="form-group half"><label>الحالة</label>
+                    <select id="isFinished" onchange="toggleScores(this.value)">
+                        <option value="false" ${item?.isFinished === false ? 'selected' : ''}>قادمة</option>
+                        <option value="true" ${item?.isFinished === true ? 'selected' : ''}>انتهت</option>
+                    </select>
+                </div>
             </div>
             <div class="form-row" id="scores-container" style="${item?.isFinished ? '' : 'display:none'}">
-                <div class="form-group half"><label>Home Score</label><input type="number" id="scoreHome" value="${item?.scoreHome || 0}"></div>
-                <div class="form-group half"><label>Away Score</label><input type="number" id="scoreAway" value="${item?.scoreAway || 0}"></div>
+                <div class="form-group half"><label>نتيجة المضيف</label><input type="number" id="scoreHome" value="${item?.scoreHome || 0}"></div>
+                <div class="form-group half"><label>نتيجة الضيف</label><input type="number" id="scoreAway" value="${item?.scoreAway || 0}"></div>
             </div>
-        `);
-        if (item) document.getElementById('isFinished').value = item.isFinished.toString();
-
+        `;
     } else if (type === 'player') {
         document.getElementById('modal-title').textContent = item ? "تعديل لاعب" : "إضافة لاعب";
-        container.insertAdjacentHTML('beforeend', `
+        html += `
             <div class="form-group"><label>الاسم الكامل</label><input type="text" id="pName" required value="${item?.name || ''}"></div>
             <div class="form-row">
                 <div class="form-group half"><label>الرقم</label><input type="number" id="pNumber" required value="${item?.number || ''}"></div>
-                <div class="form-group half"><label>الدور (Role)</label><input type="text" id="pRole" placeholder="Captain/Player" value="${item?.role || 'Player'}"></div>
+                <div class="form-group half"><label>الدور</label><input type="text" id="pRole" value="${item?.role || ''}" placeholder="مدرب / لاعب"></div>
             </div>
-            <div class="form-group"><label>المركز (Position)</label><input type="text" id="pPos" required value="${item?.position || ''}"></div>
-         `);
-
+            <div class="form-group"><label>المركز</label><input type="text" id="pPos" required value="${item?.position || ''}"></div>
+         `;
     } else if (type === 'news') {
         document.getElementById('modal-title').textContent = item ? "تعديل خبر" : "إضافة خبر";
-
-        let imgPreview = '';
-        if (item?.image) {
-            imgPreview = `<img src="${item.image}" style="width: 100%; max-height: 150px; object-fit: contain; margin-top: 10px; border-radius: 5px;">`;
-        }
-
-        container.insertAdjacentHTML('beforeend', `
+        // Simple news form for now
+        html += `
             <div class="form-group"><label>العنوان</label><input type="text" id="nTitle" required value="${item?.title || ''}"></div>
-            <div class="form-group">
-                <label>صورة الخبر (Maximum 1MB)</label>
-                <input type="file" id="nImageFile" accept="image/*">
-                <input type="hidden" id="nImageBase64" value=""> <!-- Stores existing or new base64 -->
-                <div id="image-preview">${imgPreview}</div>
-            </div>
-            <div class="form-group"><label>المحتوى</label>
-                <!-- Quill Editor Container -->
-                <div id="editor-container" style="height: 200px; background: white; color: black;"></div>
-                <input type="hidden" id="nContent">
-            </div>
             <div class="form-group"><label>التاريخ</label><input type="date" id="nDate" required value="${item?.date || ''}"></div>
-         `);
-
-        // If editing, keep old image in hidden field
-        if (item?.image) {
-            document.getElementById('nImageBase64').value = item.image;
-        }
-
-        // Initialize Quill
-        const quill = new Quill('#editor-container', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'align': [] }],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                    [{ 'direction': 'rtl' }],     // RTL support
-                    ['clean']
-                ]
-            }
-        });
-
-        // Set content if editing
-        if (item?.content) {
-            quill.root.innerHTML = item.content;
-        }
-
-        // Store Quill instance globally or on the form to access it safely during submit
-        window.currentQuill = quill;
-
-        // Handle file selection
-        document.getElementById('nImageFile').onchange = async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                try {
-                    const base64 = await compressImage(file);
-                    document.getElementById('nImageBase64').value = base64;
-                    document.getElementById('image-preview').innerHTML = `<img src="${base64}" style="width: 100%; max-height: 150px; object-fit: contain; margin-top: 10px; border-radius: 5px;">`;
-                } catch (err) {
-                    alert("فشل ضغط الصورة: " + err.message);
-                }
-            }
-        };
+        `;
     }
 
-    container.appendChild(saveBtn);
-
-    // Re-attach event for match score toggle if match
-    if (type === 'match') {
-        document.getElementById('isFinished').onchange = (e) => {
-            document.getElementById('scores-container').style.display = e.target.value === 'true' ? 'flex' : 'none';
-        }
-    }
+    html += `<button type="submit" class="btn-login" id="save-btn">${btnText}</button>`;
+    formContainer.innerHTML = html;
 }
 
-// Utility: Compress Image to Base64
-function compressImage(file) {
-    return new Promise((resolve, reject) => {
-        const maxWidth = 800;
-        const maxHeight = 800;
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = () => {
-                let width = img.width;
-                let height = img.height;
-
-                if (width > height) {
-                    if (width > maxWidth) {
-                        height *= maxWidth / width;
-                        width = maxWidth;
-                    }
-                } else {
-                    if (height > maxHeight) {
-                        width *= maxHeight / height;
-                        height = maxHeight;
-                    }
-                }
-
-                const canvas = document.createElement('canvas');
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                // Compress to JPEG 0.7 quality
-                resolve(canvas.toDataURL('image/jpeg', 0.7));
-            };
-            img.onerror = (err) => reject(err);
-        };
-        reader.onerror = (err) => reject(err);
-    });
-}
-
+window.toggleScores = (val) => {
+    document.getElementById('scores-container').style.display = (val === 'true') ? 'flex' : 'none';
+};
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -318,21 +269,21 @@ form.addEventListener('submit', async (e) => {
     btn.textContent = 'جاري الحفظ...'; btn.disabled = true;
 
     try {
-        let collectionName = '';
+        let col = '';
         let data = {};
 
         if (currentType === 'match') {
-            collectionName = 'matches';
+            col = 'matches';
             data = {
-                teamHome: document.getElementById('teamHome').value,
-                teamAway: document.getElementById('teamAway').value,
+                homeTeam: document.getElementById('teamHome').value,
+                awayTeam: document.getElementById('teamAway').value,
                 date: document.getElementById('matchDate').value,
                 isFinished: document.getElementById('isFinished').value === 'true',
                 scoreHome: document.getElementById('scoreHome').value,
                 scoreAway: document.getElementById('scoreAway').value
             };
         } else if (currentType === 'player') {
-            collectionName = 'squad';
+            col = 'squad';
             data = {
                 name: document.getElementById('pName').value,
                 number: document.getElementById('pNumber').value,
@@ -340,25 +291,15 @@ form.addEventListener('submit', async (e) => {
                 position: document.getElementById('pPos').value
             };
         } else if (currentType === 'news') {
-            collectionName = 'news';
-
-            // Get HTML from Quill
-            const contentHTML = window.currentQuill ? window.currentQuill.root.innerHTML : '';
-
+            col = 'news';
             data = {
                 title: document.getElementById('nTitle').value,
-                content: contentHTML,
-                date: document.getElementById('nDate').value,
-                image: document.getElementById('nImageBase64').value
+                date: document.getElementById('nDate').value
             };
         }
 
-
-        if (editingId) {
-            await updateDoc(doc(db, collectionName, editingId), data);
-        } else {
-            await addDoc(collection(db, collectionName), data);
-        }
+        if (editingId) await updateDoc(doc(db, col, editingId), data);
+        else await addDoc(collection(db, col), data);
 
         modal.classList.add('hidden');
         if (currentType === 'match') loadMatches();
@@ -373,22 +314,116 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-closeModalBtn.onclick = () => modal.classList.add('hidden');
+if (closeModalBtn) closeModalBtn.onclick = () => modal.classList.add('hidden');
 
-// Globals
-window.openModal = openModal; // Expose for HTML onclick
+
+// --- Schedule Modal Logic (Separate Modal) ---
+const scheduleModal = document.getElementById('schedule-modal');
+const closeScheduleModal = document.getElementById('close-schedule-modal');
+const scheduleForm = document.getElementById('schedule-form');
+
+window.openScheduleModal = () => {
+    scheduleForm.reset();
+    document.getElementById('schedule-id').value = '';
+    document.getElementById('schedule-modal-title').textContent = "إضافة موعد مباراة";
+    if (scheduleModal) scheduleModal.classList.remove('hidden');
+};
+
+window.editScheduleItem = (id, round, opponent) => {
+    document.getElementById('schedule-id').value = id;
+    document.getElementById('scheduleRound').value = round;
+    document.getElementById('scheduleOpponent').value = opponent;
+    document.getElementById('schedule-modal-title').textContent = "تعديل موعد";
+    if (scheduleModal) scheduleModal.classList.remove('hidden');
+};
+
+if (closeScheduleModal) closeScheduleModal.onclick = () => scheduleModal.classList.add('hidden');
+
+if (scheduleForm) {
+    scheduleForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('schedule-id').value;
+        const data = {
+            round: Number(document.getElementById('scheduleRound').value),
+            opponent: document.getElementById('scheduleOpponent').value
+        };
+
+        try {
+            if (id) await updateDoc(doc(db, "schedule", id), data);
+            else await addDoc(collection(db, "schedule"), data);
+            scheduleModal.classList.add('hidden');
+            loadSchedule();
+        } catch (err) {
+            console.error(err);
+            alert("Error saving schedule");
+        }
+    });
+}
+
+// --- Global Helpers ---
 window.editItem = (type, id) => {
     let item;
-    if (type === 'match') item = matches.find(m => m.id === id);
-    else if (type === 'player') item = squad.find(s => s.id === id);
-    else if (type === 'news') item = news.find(n => n.id === id);
+    if (type === 'match') item = matchesData.find(m => m.id === id);
+    else if (type === 'player') item = squadData.find(s => s.id === id);
+    else if (type === 'news') item = newsData.find(n => n.id === id);
     openModal(type, item);
 };
 
 window.deleteItem = async (col, id) => {
-    if (!confirm('حذف؟')) return;
-    await deleteDoc(doc(db, col, id));
-    if (col === 'matches') loadMatches();
-    else if (col === 'squad') loadSquad();
-    else loadNews();
+    if (!confirm("هل أنت متأكد من الحذف؟")) return;
+    try {
+        await deleteDoc(doc(db, col, id));
+        if (col === 'matches') loadMatches();
+        else if (col === 'squad') loadSquad();
+        else if (col === 'news') loadNews();
+        else if (col === 'schedule') loadSchedule();
+    } catch (err) {
+        console.error(err);
+        alert("Error deleting item");
+    }
 };
+
+// --- Seed Data Logic (Temporary) ---
+const seedBtn = document.getElementById('seed-schedule-btn');
+if (seedBtn) {
+    seedBtn.addEventListener('click', async () => {
+        if (!confirm("هل تريد استرجاع جدول المباريات الافتراضي (الدورات 14-30)؟ هذا قد يؤدي إلى تكرار البيانات إذا كانت موجودة.")) return;
+
+        seedBtn.textContent = "جاري الاسترجاع...";
+        seedBtn.disabled = true;
+
+        const defaultSchedule = [
+            { round: 14, opponent: "اتحاد المحمدية (Ittihad Mohammedia)" },
+            { round: 15, opponent: "شـب الدروة (Chabab Deroua)" },
+            { round: 16, opponent: "أمل سيدي رحال (Amal Sidi Rahal)" },
+            { round: 17, opponent: "أمل الغرباوي (Amal Gharbaoui)" },
+            { round: 18, opponent: "نادي لانوريا (Club Lanoria)" },
+            { round: 19, opponent: "نهضة سطات (Nahdat Settat)" },
+            { round: 20, opponent: "اتحاد بن أحمد (Ittihad Ben Ahmed)" },
+            { round: 21, opponent: "الوداد البيضاوي (Wydad Casablanca)" },
+            { round: 22, opponent: "أمل سيدي بنور (Amal Sidi Bennour)" },
+            { round: 23, opponent: "حسنية خريبكة (Hassania Khouribga)" },
+            { round: 24, opponent: "يوسفية الرباطية (Youssoufia Rabat)" },
+            { round: 25, opponent: "التكوين المهني (Formation Professionnelle)" },
+            { round: 26, opponent: "نسمة السطاتية (Nasma Settatia)" },
+            { round: 27, opponent: "أمل نهضة زمامرة (Amal Nahdat Zemamra)" },
+            { round: 28, opponent: "الرجاء البيضاوي (Raja Casablanca)" },
+            { round: 29, opponent: "اتحاد المحمدية (Ittihad Mohammedia)" },
+            { round: 30, opponent: "شـب الدروة (Chabab Deroua)" }
+        ];
+
+        try {
+            for (const item of defaultSchedule) {
+                await addDoc(collection(db, "schedule"), item);
+            }
+            alert("تم استرجاع البيانات بنجاح!");
+            loadSchedule();
+        } catch (error) {
+            console.error(error);
+            alert("حدث خطأ أثناء الاسترجاع: " + error.message);
+        } finally {
+            seedBtn.textContent = "استرجاع البيانات الافتراضية";
+            seedBtn.disabled = false;
+        }
+    });
+}

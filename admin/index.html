@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم | CSNOS Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="/admin/admin.css">
     <!-- Quill.js Theme -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <link rel="icon" type="image/jpg" href="../assets/logo_final.jpg">
+    <link rel="icon" type="image/jpg" href="/assets/logo_final.jpg">
 </head>
 
 <body>
@@ -24,6 +24,7 @@
                 <li><a href="#" class="active" id="nav-matches">⚽ المباريات</a></li>
                 <li><a href="#" id="nav-squad">👥 الفريق</a></li>
                 <li><a href="#" id="nav-news">📰 الأخبار</a></li>
+                <li><a href="#" id="nav-schedule">📅 الجدول</a></li>
                 <li><a href="#" id="logout-btn" style="color: #ff6b6b;">🚪 تسجيل الخروج</a></li>
             </ul>
         </aside>
@@ -32,7 +33,7 @@
         <main class="main-content">
             <div class="header-bar">
                 <h2 id="page-title">إدارة المباريات</h2>
-                <button class="btn-login" id="add-match-btn" style="width: auto; padding: 10px 25px;">+ إضافة
+                <button class="btn-login" id="main-action-btn" style="width: auto; padding: 10px 25px;">+ إضافة
                     مباراة</button>
             </div>
 
@@ -92,13 +93,34 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Schedule List (Hidden by default) -->
+            <div id="schedule-view" class="content-card hidden">
+                <div class="table-responsive">
+                    <div style="text-align: left; margin-bottom: 10px;">
+                        <button id="seed-schedule-btn" class="btn-login"
+                            style="background-color: #28a745; width: auto; padding: 5px 15px; font-size: 0.8rem;">استرجاع
+                            البيانات الافتراضية</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الدورة</th>
+                                <th>الخصم</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </main>
     </div>
 
     <!-- Match Modal (Add/Edit) -->
     <div id="match-modal" class="modal hidden">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
+            <span class="close-modal" id="close-match-modal">&times;</span>
             <h3 id="modal-title">إضافة مباراة جديدة</h3>
             <form id="match-form">
                 <input type="hidden" id="match-id">
@@ -144,9 +166,29 @@
         </div>
     </div>
 
+    <!-- Schedule Modal -->
+    <div id="schedule-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="close-schedule-modal">&times;</span>
+            <h3 id="schedule-modal-title">إضافة موعد مباراة</h3>
+            <form id="schedule-form">
+                <input type="hidden" id="schedule-id">
+                <div class="form-group">
+                    <label>الدورة</label>
+                    <input type="number" id="scheduleRound" required placeholder="مثال: 14">
+                </div>
+                <div class="form-group">
+                    <label>الخصم</label>
+                    <input type="text" id="scheduleOpponent" required placeholder="مثال: Ittihad Mohammedia">
+                </div>
+                <button type="submit" class="btn-login">حفظ</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Quill.js Library -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script type="module" src="dashboard.js"></script>
+    <script type="module" src="/admin/dashboard.js"></script>
 </body>
 
 </html>

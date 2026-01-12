@@ -42,7 +42,7 @@
                 <span class="logo-text">C.S.N.O.S</span>
             </a>
             <ul class="nav-links">
-                <li><a href="#hero" data-i18n="navHome">الرئيسية</a></li>
+                <li><a href="#hero" class="active" data-i18n="navHome">الرئيسية</a></li>
                 <li><a href="#about" data-i18n="navAbout">عن النادي</a></li>
                 <li><a href="#squad" data-i18n="navSquad">الفريق</a></li>
                 <li><a href="#matches" data-i18n="navMatches">المباريات</a></li>
@@ -105,10 +105,71 @@
                         لتشريف المنطقة وتطوير المواهب المحلية.</p>
                     <p data-i18n="aboutText3">تحت شعار <strong>#DIMACSNOS</strong>، نواصل المسير في موسم 2025-2026 بطموح
                         الصعود وتحقيق الألقاب.</p>
+
+                    <!-- Tabs Navigation -->
+                    <div class="about-tabs">
+                        <button class="tab-btn active" onclick="switchTab('club-info')">معلومات النادي</button>
+                        <button class="tab-btn" onclick="switchTab('achievements')">الألقاب والإنجازات</button>
+                    </div>
+
+                    <!-- Club Info Tab -->
+                    <div id="club-info" class="tab-content active">
+                        <div class="club-info-box">
+                            <ul class="club-info-list" style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 10px;"><strong data-i18n="labelFounded">تأسس النادي
+                                        سنة:</strong>
+                                    <span data-i18n="valFounded">1996</span>
+                                </li>
+
+                                <li style="margin-bottom: 15px;"><strong data-i18n="labelFounders"
+                                        style="display:block; margin-bottom:5px;">المؤسس:</strong>
+                                    <ul style="list-style: disc; margin-right: 20px; color: #555;">
+                                        <li data-i18n="valFounder1">علي بوغو</li>
+                                        <li data-i18n="valFounder2">مصطفى محبوب</li>
+                                        <li data-i18n="valFounder3">جابر المعطي</li>
+                                    </ul>
+                                </li>
+
+                                <li style="margin-bottom: 10px;"><strong data-i18n="labelPresident">الرئيس
+                                        الحالي:</strong>
+                                    <span data-i18n="valPresident">كمال بوغو</span>
+                                </li>
+
+                                <li style="margin-bottom: 10px;"><strong data-i18n="labelStadium">ملعب النادي:</strong>
+                                    <span data-i18n="valStadium">الرجراجي سلام - النواصر</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Achievements Tab -->
+                    <div id="achievements" class="tab-content">
+                        <div class="achievements-box">
+                            <ul class="achievements-list" style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 10px; display: flex; align-items: start;">
+                                    <span style="color: gold; margin-left: 10px;">🏆</span>
+                                    <span data-i18n="achieve2006">الصعود من قسم شرفي الأول إلى قسم الثاني هواة سنة
+                                        2006</span>
+                                </li>
+                                <li style="margin-bottom: 10px; display: flex; align-items: start;">
+                                    <span style="color: gold; margin-left: 10px;">🏆</span>
+                                    <span data-i18n="achieve2008">الصعود من قسم الثاني هواة إلى الأول هواة سنة
+                                        2008</span>
+                                </li>
+                                <li style="margin-bottom: 10px; display: flex; align-items: start;">
+                                    <span style="color: gold; margin-left: 10px;">🏆</span>
+                                    <span data-i18n="achieve2022">الصعود إلى قسم الشمال الغربي سنة 2022</span>
+                                </li>
+                                <li style="margin-bottom: 10px; display: flex; align-items: start;">
+                                    <span style="color: gold; margin-left: 10px;">🏆</span>
+                                    <span data-i18n="achieveCup">لعب دور الثمن النهائي لكأس العرش</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="about-image">
-                    <img src="assets/team_banner.png" alt="Team Banner" class="img-responsive rounded shadow">
-                </div>
+
             </div>
         </div>
     </section>
@@ -122,41 +183,45 @@
             </div>
 
             <div class="squad-grid" id="squad-grid">
-                <!-- Player Cards -->
+                <!-- Coach -->
                 <div class="player-card hidden-on-scroll">
-                    <div class="player-img-placeholder">
-                        <span class="player-number">10</span>
+                    <div class="player-img-placeholder" style="background-color: #333;">
+                        <span class="player-number">C</span>
                     </div>
                     <div class="player-info">
-                        <h4 data-i18n="roleCaptain">الكابتن</h4>
-                        <p data-i18n="posMidfielder">وسط ميدان</p>
+                        <h4 data-i18n="roleCoach">المدرب</h4>
+                        <p>صلاح رشيد</p>
                     </div>
                 </div>
-                <div class="player-card hidden-on-scroll">
-                    <div class="player-img-placeholder">
-                        <span class="player-number">9</span>
-                    </div>
-                    <div class="player-info">
-                        <h4 data-i18n="roleStriker">الهداف</h4>
-                        <p data-i18n="posForward">مهاجم</p>
-                    </div>
-                </div>
-                <div class="player-card hidden-on-scroll">
-                    <div class="player-img-placeholder">
-                        <span class="player-number">1</span>
-                    </div>
-                    <div class="player-info">
-                        <h4 data-i18n="roleGoalkeeper">حارس المرمى</h4>
-                        <p data-i18n="posGoalkeeper">حارس المرمى</p>
-                    </div>
-                </div>
+
+                <!-- Defender -->
                 <div class="player-card hidden-on-scroll">
                     <div class="player-img-placeholder">
                         <span class="player-number">4</span>
                     </div>
                     <div class="player-info">
                         <h4 data-i18n="roleDefender">المدافع</h4>
-                        <p data-i18n="posCenterBack">قلب دفاع</p>
+                        <p>عصام رابيح</p>
+                    </div>
+                </div>
+
+                <!-- Goalkeepers -->
+                <div class="player-card hidden-on-scroll">
+                    <div class="player-img-placeholder">
+                        <span class="player-number">1</span>
+                    </div>
+                    <div class="player-info">
+                        <h4 data-i18n="roleGoalkeeper">حارس المرمى</h4>
+                        <p>مصطفى بعلي</p>
+                    </div>
+                </div>
+                <div class="player-card hidden-on-scroll">
+                    <div class="player-img-placeholder">
+                        <span class="player-number">12</span>
+                    </div>
+                    <div class="player-info">
+                        <h4 data-i18n="roleGoalkeeper">حارس المرمى</h4>
+                        <p>هشام شائي</p>
                     </div>
                 </div>
             </div>
@@ -188,9 +253,76 @@
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="btn btn-secondary" style="color: var(--primary-blue); border-color: var(--primary-blue);"
-                    data-i18n="loadMoreMatches">المزيد من المباريات</button>
+        </div>
+
+    </section>
+
+    <!-- Schedule Section (Matches) -->
+    <section id="schedule" class="schedule-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="scheduleHeader">جدول المباريات</h2>
+                <div class="header-line"></div>
+            </div>
+            <div class="schedule-container">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="tableRound">الجولة</th>
+                            <th data-i18n="tableOpponent">الخصم</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-table-body">
+                        <!-- Content will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- News/Honors Section -->
+    <section id="news-honors" class="section news bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>أخبار وتكريمات</h2>
+                <div class="header-line"></div>
+            </div>
+            <div class="news-grid">
+                <!-- News Item 1 -->
+                <div class="news-card">
+                    <div class="news-img">
+                        <img src="assets/news_4.jpg" alt="تتويج النادي">
+                        <!-- Swapped to news_4 (Check) for 100k DH -->
+                    </div>
+                    <div class="news-content">
+                        <h3>تكريم وتشجيع</h3>
+                        <p>استلام النادي لمنحة دعم بقيمة 100,000 درهم تقديراً للجهود المستمرة والنتائج المتميزة.</p>
+                    </div>
+                </div>
+
+                <!-- News Item 2 -->
+                <div class="news-card">
+                    <div class="news-img">
+                        <img src="assets/news_1.jpg" alt="درع التكريم">
+                    </div>
+                    <div class="news-content">
+                        <h3>احتفالية الصعود</h3>
+                        <p>لحظات من الاحتفال بتكريم الفريق، بحضور الطاقم الإداري والتقني.</p>
+                    </div>
+                </div>
+
+                <!-- News Item 3 -->
+                <div class="news-card">
+                    <div class="news-img">
+                        <img src="assets/news_3.jpg" alt="تكريم اللاعبين">
+                        <!-- Swapped to news_3 (Shield) for Pride -->
+                    </div>
+                    <div class="news-content">
+                        <h3>فخر المنطقة</h3>
+                        <p>تكريم خاص يعكس مدى التزام النادي بتمثيل منطقة النواصر وأولاد صالح أحسن تمثيل.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -253,29 +385,85 @@
                     <img src="assets/gallery_9.jpg" alt="Team Photo 9" loading="lazy">
                 </div>
             </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-modern">
+        <div class="container">
+            <div class="modern-contact-card">
+                <!-- Left Side: Contact Info -->
+                <div class="contact-details">
+                    <h2 class="contact-title" data-i18n="contactHeader">اتصل بنا</h2>
+                    <div class="header-line start"></div>
+                    <p class="contact-subtitle">نحن سعداء بتواصلكم معنا</p>
+
+                    <div class="contact-items">
+                        <div class="contact-item">
+                            <div class="icon-box">📍</div>
+                            <div class="item-text">
+                                <h3 data-i18n="addressTitle">العنوان</h3>
+                                <p data-i18n="addressText">أولاد صالح، إقليم النواصر، الدار البيضاء، المغرب</p>
+                                <a href="https://maps.app.goo.gl/ghVQji9MCGxnzhKw6" target="_blank" class="map-link">فتح
+                                    في خرائط جوجل</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="icon-box">📞</div>
+                            <div class="item-text">
+                                <h3 data-i18n="phoneTitle">الهاتف</h3>
+                                <p dir="ltr">06.64.07.00.55 / 06.28.43.89.40</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="icon-box">✉️</div>
+                            <div class="item-text">
+                                <h3 data-i18n="emailTitle">البريد الإلكتروني</h3>
+                                <p>contact@csnos.ma</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Buttons -->
+                    <div class="social-buttons">
+                        <a href="https://web.facebook.com/profile.php?id=100057113004147" target="_blank"
+                            class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Side: Map -->
+                <div class="contact-map-wrapper">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3331.8386651207084!2d-7.6194444!3d33.3752778!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda62551aabc7e69%3A0x62236769906d71b5!2z2YXZhNi52Kgg2LHZg9ix2KfZg9mKINiz2YTYp9mF!5e0!3m2!1sen!2sma!4v1768216316584!5m2!1sen!2sma"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="footer">
-        <div class="container footer-content">
-            <div class="footer-brand">
-                <img src="assets/logo_final.jpg" alt="Logo" class="footer-logo">
-                <h3>Club Sportif Nouacer Ouled Saleh</h3>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="assets/logo_final.jpg" alt="Logo" class="footer-logo">
+                    <h3>Club Sportif Nouacer Ouled Saleh</h3>
+                </div>
+                <div class="footer-socials">
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="https://web.facebook.com/profile.php?id=100057113004147" class="social-link"
+                        target="_blank">Facebook</a>
+                    <a href="#" class="social-link">Twitter</a>
+                </div>
             </div>
-            <div class="footer-socials">
-                <a href="#" class="social-link">Instagram</a>
-                <a href="https://web.facebook.com/profile.php?id=100057113004147" class="social-link"
-                    target="_blank">Facebook</a>
-                <a href="#" class="social-link">Twitter</a>
+            <div class="footer-bottom">
+                <p data-i18n="footerCopyright">&copy; 2026 النادي الرياضي النواصر أولاد صالح. جميع الحقوق محفوظة.
+                </p>
             </div>
-            <div class="footer-contact">
-                <p data-i18n="footerAddress">أولاد صالح، إقليم النواصر، الدار البيضاء، المغرب</p>
-                <p>contact@csnos.ma</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p data-i18n="footerCopyright">&copy; 2026 النادي الرياضي النواصر أولاد صالح. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
@@ -291,6 +479,40 @@
 
     <script type="module" src="script.js"></script>
 
+    <script type="module">
+        import { db } from "./firebase-config.js";
+        import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+        async function loadSchedule() {
+            const tableBody = document.getElementById('schedule-table-body');
+            try {
+                const q = query(collection(db, "schedule"), orderBy("round", "asc"));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    tableBody.innerHTML = '<tr><td colspan="2" style="text-align:center;">لا توجد مواعيد حالياً</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const item = doc.data();
+                    const row = `
+                        <tr>
+                            <td><strong>${item.round}</strong></td>
+                            <td>${item.opponent}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("Error loading schedule:", error);
+                tableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:red;">خطأ في تحميل الجدول</td></tr>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSchedule);
+    </script>
 </body>
 
 </html>

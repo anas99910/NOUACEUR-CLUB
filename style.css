@@ -54,6 +54,17 @@ body {
     background-color: var(--bg-body);
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    /* Added for sticky footer */
+    flex-direction: column;
+    /* Added for sticky footer */
+    min-height: 100vh;
+    /* Added for sticky footer */
+}
+
+/* Ensure footer stays at bottom */
+footer {
+    margin-top: auto;
 }
 
 h1,
@@ -357,22 +368,61 @@ ul {
 }
 
 /* About Section */
+.about {
+    position: relative;
+    background: url('assets/team_historic.png') no-repeat center center/cover;
+    background-attachment: fixed;
+    /* Optional: Adds a nice parallax effect */
+    color: white;
+    /* Switch to white text */
+}
+
+/* Overlay for About Section */
+.about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Darker overlay for better text visibility */
+    background: linear-gradient(135deg, rgba(0, 51, 160, 0.9) 0%, rgba(0, 20, 60, 0.95) 100%);
+    z-index: 1;
+}
+
+.about .container {
+    position: relative;
+    z-index: 2;
+    /* Ensure content is above overlay */
+}
+
 .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
-    align-items: center;
+    display: block;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-text {
+    position: relative;
+    padding: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .about-text h3 {
     font-size: 2rem;
     margin-bottom: 20px;
-    color: var(--primary-blue);
+    color: #ffeb3b;
+    /* Gold/Yellow for subheaders */
+    font-weight: 800;
 }
 
 .about-text p {
     margin-bottom: 20px;
-    color: #555;
+    color: #e0e0e0;
+    /* Light grey for body text */
+    font-size: 1.1rem;
+    line-height: 1.8;
 }
 
 /* Squad Section */
@@ -620,6 +670,47 @@ ul {
     transform: translateY(-5px);
 }
 
+/* Schedule Section */
+.schedule-section {
+    max-width: 1000px;
+    margin: 60px auto 0;
+}
+
+.schedule-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-ar);
+}
+
+.schedule-table th,
+.schedule-table td {
+    padding: 15px 20px;
+    text-align: right;
+    border-bottom: 1px solid #eee;
+}
+
+.schedule-table th {
+    background-color: var(--primary-blue);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.schedule-table tr:last-child td {
+    border-bottom: none;
+}
+
+.schedule-table tr:hover {
+    background-color: #f9f9f9;
+}
+
 
 /* Matches Section */
 .matches {
@@ -755,6 +846,79 @@ ul {
     /* Align towards center */
     flex-direction: row-reverse;
     /* Mirror layout for away team */
+}
+
+/* About Tabs */
+.about-tabs {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    justify-content: center;
+    border-bottom: 2px solid #eee;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 0;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: #888;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.tab-btn.active {
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-blue);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Darker context overrides */
+.club-info-list li,
+.achievements-list li {
+    color: #f0f0f0;
+}
+
+.club-info-list strong {
+    color: #ffeb3b;
+    /* Gold/Yellow */
+}
+
+.club-info-list ul {
+    color: #ccc !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .team-name {
@@ -942,21 +1106,230 @@ html[data-theme="dark"] #preloader {
 }
 
 /* --- News Section --- */
+/* ---/* News Section */
+.news {
+    padding: 80px 0;
+    background-color: var(--bg-secondary);
+}
+
 .news-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
-    padding: 20px 0;
+    justify-content: center;
+    /* Center items if they don't fill the row */
 }
 
 .news-card {
-    background: var(--card-bg, #fff);
+    background: white;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
+}
+
+/* Modern Contact Section */
+.contact-modern {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.contact-modern .container {
+    max-width: 1600px;
+    /* Override default container width to allow wider card */
+    width: 95%;
+    /* Use 95% of screen width to ensure margins */
+    display: flex;
+    justify-content: center;
+}
+
+.modern-contact-card {
+    display: flex;
+    flex-direction: row;
+    /* Info (Right) and Map (Left) in RTL */
+    background: #1a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    min-height: 550px;
+    /* Slightly taller */
+    width: 100%;
+    max-width: 1400px;
+    /* Wider card */
+    margin: 0 auto;
+    /* Center it */
+}
+
+.contact-details {
+    flex: 0.8;
+    /* Reduce info width weight */
+    padding: 30px;
+    /* Reduce padding to save space */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+    /* Arabic alignment */
+}
+
+.footer-logo {
+    height: 60px;
+    width: 60px;
+    /* Ensure square for perfect circle */
+    border-radius: 50%;
+    margin-bottom: 15px;
+    object-fit: cover;
+    /* Ensures logo fills the circle */
+    border: 2px solid white;
+    /* Add border to make it look intentional */
+}
+
+.contact-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.header-line.start {
+    width: 60px;
+    height: 4px;
+    background: var(--primary-color);
+    margin-bottom: 20px;
+    margin-right: 0;
+    /* Align right for Arabic */
+}
+
+.contact-subtitle {
+    font-size: 1.1rem;
+    color: #ccc;
+    margin-bottom: 40px;
+}
+
+.contact-items {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.icon-box {
+    font-size: 1.5rem;
+    min-width: 30px;
+}
+
+.item-text h3 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.item-text p {
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+.map-link {
+    background: linear-gradient(135deg, #0d6efd 0%, #0043a8 100%);
+    /* Bright Blue Gradient */
+    color: #fff !important;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+    /* Blue shadow */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.map-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.5);
+    background: linear-gradient(135deg, #0b5ed7 0%, #003580 100%);
+}
+
+.contact-map-wrapper {
+    flex: 1.5;
+    /* Give map majority of the width */
+    position: relative;
+    min-height: 400px;
+    background: #eee;
+    /* Placeholder bg while loading */
+}
+
+.contact-map-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Social Buttons */
+.social-buttons {
+    margin-top: 50px;
+    display: flex;
+    gap: 15px;
+}
+
+.social-btn {
+    padding: 10px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.social-btn.instagram {
+    background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+}
+
+.social-btn.facebook {
+    background: #1877f2;
+}
+
+@media (max-width: 900px) {
+    .modern-contact-card {
+        flex-direction: column;
+    }
+
+    .contact-map-wrapper {
+        min-height: 300px;
+        flex: auto;
+        height: 300px;
+    }
 }
 
 .news-card:hover {
@@ -1086,6 +1459,34 @@ html[data-theme="dark"] #preloader {
     color: var(--primary-blue);
 }
 
+/* Schedule Section Fix */
+.schedule-section {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    /* Reset massive margins */
+}
+
+.schedule-container {
+    max-width: 1200px;
+    /* Wider container for desktop */
+    margin: 0 auto;
+    width: 100%;
+    overflow-x: auto;
+    /* Keep scroll for mobile */
+}
+
+/* Ensure table takes full width */
+.schedule-table {
+    width: 100%;
+    min-width: 600px;
+    /* Ensure it doesn't get crushed too small */
+    border-collapse: separate;
+    /* Or collapse, based on preference */
+    border-spacing: 0 10px;
+    /* Spacing between rows */
+}
+
 /* LTR Override for Close Button */
 [dir="ltr"] .close-modal {
     left: auto;
@@ -1179,6 +1580,27 @@ html[data-theme="dark"] #preloader {
     color: #aaa;
 }
 
-[data-theme="dark"] .modal-footer {
-    border-top-color: #333;
+/* News Section Styles Correction */
+.news-img {
+    height: 350px;
+    /* Increased height for portrait photos */
+    background-color: #f8f9fa;
+    /* Light gray background to fill gaps */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.news-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* Ensures full picture is shown */
+    transition: transform 0.3s ease;
+}
+
+.news-card:hover .news-img img {
+    transform: scale(1.02);
+    /* Subtle zoom */
 }
